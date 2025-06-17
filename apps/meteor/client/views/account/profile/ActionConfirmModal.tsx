@@ -7,7 +7,7 @@ import GenericModal from '../../../components/GenericModal';
 
 type ActionConfirmModalProps = {
 	isPassword: boolean;
-	onConfirm: (input: string) => void;
+	onConfirm: (input: string, setError: (msg: string) => void) => void;
 	onCancel: () => void;
 };
 
@@ -32,10 +32,10 @@ const ActionConfirmModal = ({ isPassword, onConfirm, onCancel }: ActionConfirmMo
 				setInputError(t('Invalid_field'));
 				return;
 			}
-			onConfirm(inputText);
-			onCancel();
+			onConfirm(inputText, setInputError);
+			
 		},
-		[inputText, onConfirm, onCancel, t],
+		[inputText, onConfirm, t],
 	);
 
 	const actionTextId = useId();
@@ -58,7 +58,7 @@ const ActionConfirmModal = ({ isPassword, onConfirm, onCancel }: ActionConfirmMo
 						{isPassword && <PasswordInput value={inputText} onChange={handleChange} aria-labelledby={actionTextId} />}
 						{!isPassword && <TextInput value={inputText} onChange={handleChange} aria-labelledby={actionTextId} />}
 					</FieldRow>
-					<FieldError>{inputError}</FieldError>
+					<FieldError aria-live='assertive' >{inputError}</FieldError>
 				</Field>
 			</FieldGroup>
 		</GenericModal>
