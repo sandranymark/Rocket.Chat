@@ -7,7 +7,7 @@ import GenericModal from '../../../components/GenericModal';
 
 type ActionConfirmModalProps = {
 	isPassword: boolean;
-	onConfirm: (input: string, setError: (msg: string) => void) => void;
+	onConfirm: (input: string, setInputError: (message: string) => void) => void;
 	onCancel: () => void;
 };
 
