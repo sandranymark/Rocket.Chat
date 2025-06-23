@@ -1,12 +1,4 @@
-import {
-	Box,
-	PasswordInput,
-	TextInput,
-	FieldGroup,
-	Field,
-	FieldRow,
-	FieldError,
-} from '@rocket.chat/fuselage';
+import { Box, PasswordInput, TextInput, FieldGroup, Field, FieldRow, FieldError } from '@rocket.chat/fuselage';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
@@ -15,18 +7,21 @@ import GenericModal from '../../../components/GenericModal';
 
 type ActionConfirmModalProps = {
 	isPassword: boolean;
-	onConfirm: (input: string, setInputError: (msg: string) => void) => void;
+	onConfirm: (input: string, setInputError: (message: string) => void) => void;
 	onCancel: () => void;
 };
 
 const ActionConfirmModal = ({ isPassword, onConfirm, onCancel }: ActionConfirmModalProps) => {
 	const { t } = useTranslation();
 	const actionTextId = useId();
+	const inputId = useId();
+	const errorId = `${inputId}-error`;
 
 	const {
 		control,
 		handleSubmit,
 		setError,
+		setFocus,
 		formState: { errors },
 	} = useForm<{ credential: string }>({
 		defaultValues: { credential: '' },
@@ -34,9 +29,10 @@ const ActionConfirmModal = ({ isPassword, onConfirm, onCancel }: ActionConfirmMo
 	});
 
 	const handleSave = handleSubmit(({ credential }) => {
-		onConfirm(credential, (msg) => {
-			if (msg) {
-				setError('credential', { message: msg });
+		onConfirm(credential, (message) => {
+			if (message) {
+				setError('credential', { message });
+				setFocus('credential');
 			}
 		});
 	});
@@ -68,21 +64,27 @@ const ActionConfirmModal = ({ isPassword, onConfirm, onCancel }: ActionConfirmMo
 								isPassword ? (
 									<PasswordInput
 										{...field}
+										id={inputId}
 										aria-labelledby={actionTextId}
-										aria-invalid={Boolean(errors.credential)}
+										aria-describedby={errors.credential ? errorId : undefined}
+										aria-invalid={Boolean(errors.credential)}	
+										aria-required="true"									
 									/>
 								) : (
 									<TextInput
 										{...field}
+										id={inputId}
 										aria-labelledby={actionTextId}
-										aria-invalid={Boolean(errors.credential)}
+										aria-describedby={errors.credential ? errorId : undefined}
+										aria-invalid={Boolean(errors.credential)}	
+										aria-required="true"									
 									/>
 								)
 							}
 						/>
 					</FieldRow>
 					{errors.credential && (
-						<FieldError aria-live="assertive">{errors.credential.message}</FieldError>
+						<FieldError aria-live="assertive" id={errorId}>{errors.credential.message}</FieldError>
 					)}
 				</Field>
 			</FieldGroup>
