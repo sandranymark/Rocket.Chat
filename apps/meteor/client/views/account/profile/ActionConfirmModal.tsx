@@ -2,6 +2,7 @@ import { Box, PasswordInput, TextInput, FieldGroup, Field, FieldRow, FieldError 
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 
 import GenericModal from '../../../components/GenericModal';
 
@@ -51,7 +52,11 @@ const ActionConfirmModal = ({ isPassword, onConfirm, onCancel }: ActionConfirmMo
 				{isPassword
 					? t('Enter_your_password_to_delete_your_account')
 					: t('Enter_your_username_to_delete_your_account')}
+				{isPassword
+					? t('Enter_your_password_to_delete_your_account')
+					: t('Enter_your_username_to_delete_your_account')}
 			</Box>
+
 
 			<FieldGroup w='full'>
 				<Field>
